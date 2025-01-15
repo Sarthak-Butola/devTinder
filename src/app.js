@@ -1,24 +1,19 @@
 const express = require("express");
 const app = express();
+const {authUser} = require ("./middlewares/auth");
+
+//handle auth middleware for get, post,... requests
+app.use("/admin",authUser);
 
 
-
-app.use("/hello",(req,res,next)=>{
-    throw new Error("hi");
-    res.send("Namaste Boi Hello!!");
-    console.log('go to next');
-}
+app.use("/admin/getData",(req,res,next)=>{
+    res.send("Namaste admin getData !!");
+ }
 );
-app.use("/hell",(req,res)=>{
-    throw new Error("hi");
-    res.send("response sent");
-})
-
-//if any error occurs in any route then this msg is sent
-app.use("/",(err,req,res,next)=>{
-    if(err)
-    res.status(500).send("something went wrong");
-})
+app.use("/admin/deleteData",(req,res,next)=>{
+    res.send("Namaste admin deleteData !!");
+ }
+);
 
 
 
