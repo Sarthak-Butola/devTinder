@@ -17,7 +17,7 @@ app.use("/hell",(req,res)=>{
 //if any error occurs in any route then this msg is sent
 app.use("/",(err,req,res,next)=>{
     if(err)
-    res.send("something went wrong");
+    res.status(500).send("something went wrong");
 })
 
 
