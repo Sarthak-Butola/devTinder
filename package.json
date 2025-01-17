@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-    
   },
   "keywords": [
     "nodejs",
@@ -14,6 +13,7 @@
   "author": "Sarthak Butola",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
   }
 }
