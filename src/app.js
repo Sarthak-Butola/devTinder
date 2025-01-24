@@ -11,6 +11,29 @@ app.use("/hello",(req,res)=>{
     res.send("hello");
 })
 
+//login api
+app.post("/login",async(req,res)=>{    
+    try{
+        const {password, emailId} = req.body;
+        const user = await User.findOne({ emailId:emailId });
+        if(!user){
+            //user not presenet in database
+            throw new Error("Invalid credentials")
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            if(isPasswordValid){
+                res.send("login successful");
+            }
+            else{
+                throw new Error("Invalid credentials");
+            }
+        
+    }catch(err){
+            res.status(400).send("ERROR: " + err.message);
+    }
+})
+
 //save a new user in the database
 app.post("/signup", async(req,res)=>{
     const user = new User(req.body);
@@ -18,12 +41,24 @@ app.post("/signup", async(req,res)=>{
     //validate the data
     validateSignupData(req);
 
-    const{password,firstName,lastName,emailId} = req.body;
+    const{password,firstName,lastName,emailId,age,gender,skills} = req.body;
     //encrypt the password before storing in the database
     const passwordHash=await bcrypt.hash(password, 10);
     console.log(passwordHash);
+    
+    //creating new user with pass as hash password
+        const newUser = new User({
+            password:passwordHash,
+            firstName,
+            lastName,
+            emailId,
+            age,
+            gender,
+            skills
+        })
+
     //this saves the user data into the DB
-        await user.save();
+        await newUser.save();
         res.send("User added successfully!!");
     }catch(err){
         res.status(400).send("error in saving the user:" + err.message);
