@@ -4,17 +4,21 @@ const{connectDB} = require("./config/database");
 const User = require("./models/user");
 const {validateSignupData} = require("./utils/validator")
 const bcrypt = require ("bcrypt");
+const cookieParser = require("cookie-parser"); 
+const jwt = require("jsonwebtoken");
+
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/hello",(req,res)=>{
     console.log("hello");
     res.send("hello");
-})
+})  
 
 //login api
 app.post("/login",async(req,res)=>{    
     try{
-        const {password, emailId} = req.body;
+        const {password, emailId, userId} = req.body;
         const user = await User.findOne({ emailId:emailId });
         if(!user){
             //user not presenet in database
@@ -23,6 +27,12 @@ app.post("/login",async(req,res)=>{
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
             if(isPasswordValid){
+                
+                //creating a token
+                const token = await jwt.sign({userId: userId}, "qwerty12345678");
+                res.cookie("token",token);
+                console.log(token);
+                
                 res.send("login successful");
             }
             else{
@@ -138,6 +148,25 @@ app.patch("/updateUser",async(req,res)=>{
     }
 })
 
+//get user profile
+app.get("/profile",async(req,res)=>{
+
+    try{
+    const cookies = req.cookies;
+    const {token}=cookies;
+    console.log(token);
+
+    const decodedMsg = await jwt.verify(token,"qwerty12345678");
+
+    const{userId} = decodedMsg;
+    // console.log(userId);
+    const user = await User.findById(userId); 
+    console.log(user);
+    res.send(user);
+    } catch(err){
+        res.send("something went wrong : " + err.message);
+    }
+})
 
 connectDB()
 .then(()=>{    
