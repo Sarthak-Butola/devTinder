@@ -6,6 +6,7 @@ const {validateSignupData} = require("./utils/validator")
 const bcrypt = require ("bcrypt");
 const cookieParser = require("cookie-parser"); 
 const jwt = require("jsonwebtoken");
+const {authUser} = require("./middlewares/auth");
 
 app.use(cookieParser());
 app.use(express.json());
@@ -28,9 +29,13 @@ app.post("/login",async(req,res)=>{
 
             if(isPasswordValid){
                 
-                //creating a token
-                const token = await jwt.sign({userId: userId}, "qwerty12345678");
-                res.cookie("token",token);
+                //creating a token                                              //expiring token
+                const token = await jwt.sign({userId: userId}, "qwerty12345678", {expiresIn:"7d"});
+                
+                //               token expiring in 24 hours
+                res.cookie("token",token,{
+                    expires: new Date(Date.now() + 24 * 3600000),
+                });
                 console.log(token);
                 
                 res.send("login successful");
@@ -149,23 +154,26 @@ app.patch("/updateUser",async(req,res)=>{
 })
 
 //get user profile
-app.get("/profile",async(req,res)=>{
+app.get("/profile",authUser,async(req,res)=>{
 
     try{
-    const cookies = req.cookies;
-    const {token}=cookies;
-    console.log(token);
-
-    const decodedMsg = await jwt.verify(token,"qwerty12345678");
-
-    const{userId} = decodedMsg;
-    // console.log(userId);
-    const user = await User.findById(userId); 
-    console.log(user);
+    const user = req.user;
     res.send(user);
+
     } catch(err){
-        res.send("something went wrong : " + err.message);
+        res.status(400).send("ERROR : " + err.message);
     }
+})
+
+//post api
+app.post("/post",authUser,async(req,res)=>{
+const user = req.user;
+
+//sending connection request
+console.log("connection req sent");
+// console.log(user);
+res.send(user.firstName + " sent a connection request");
+
 })
 
 connectDB()
