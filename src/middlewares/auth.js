@@ -21,7 +21,6 @@ const authUser = async(req,res,next)=>{
         //STORING USER RETRIEVED IN REQ
         req.user = user;
         next();
-
         } catch(err){
             res.status(400).send("ERROR : " + err.message);
         }
