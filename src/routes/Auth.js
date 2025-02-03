@@ -1,5 +1,5 @@
 const express = require("express");
-const userRouter = express.Router();
+const authRouter = express.Router();
 const User = require("../models/user");
 const {validateSignupData} = require("../utils/validator")
 const bcrypt = require ("bcrypt");
@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 
 
-userRouter.post("/login",async(req,res)=>{    
+authRouter.post("/login",async(req,res)=>{    
     try{
         const {password, emailId} = req.body;
         const user = await User.findOne({ emailId:emailId });
@@ -40,7 +40,7 @@ userRouter.post("/login",async(req,res)=>{
 })
 
 //save a new user in the database
-userRouter.post("/signup", async(req,res)=>{
+authRouter.post("/signup", async(req,res)=>{
     const user = new User(req.body);
     try{
     //validate the data
@@ -70,6 +70,15 @@ userRouter.post("/signup", async(req,res)=>{
         }
     });
 
+// Logout API
+authRouter.post("/logout", (req,res)=>{
+res.cookie("token", null, {
+    expires: new Date(Date.now()),
+})
+res.send("Logout successful");
+})
+
+
 module.exports = {
-userRouter
+authRouter
 }

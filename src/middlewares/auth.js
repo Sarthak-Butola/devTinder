@@ -24,8 +24,11 @@ const authUser = async(req,res,next)=>{
         } catch(err){
             res.status(400).send("ERROR : " + err.message);
         }
-    
  };
+
+
+
  module.exports = {
     authUser,
+    
  }
