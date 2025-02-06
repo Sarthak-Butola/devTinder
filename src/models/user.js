@@ -65,6 +65,9 @@ const userSchema = new mongoose.Schema({
     timestamps:true,
 });
 
+// no need for this as emailId is already unique:true
+// userSchema.index({emailId:1});
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
