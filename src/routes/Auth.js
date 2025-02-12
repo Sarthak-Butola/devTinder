@@ -26,7 +26,7 @@ authRouter.post("/login",async(req,res)=>{
                 res.cookie("token",token,{
                     expires: new Date(Date.now() + 24 * 3600000),
                 });
-                console.log(token);
+                // console.log(token);
                 
                 res.send("login successful");
             }
@@ -49,7 +49,7 @@ authRouter.post("/signup", async(req,res)=>{
     const{password,firstName,lastName,emailId,age,gender,skills} = req.body;
     //encrypt the password before storing in the database
     const passwordHash=await bcrypt.hash(password, 10);
-    console.log(passwordHash);
+    // console.log(passwordHash);
     
     //creating new user with pass as hash password
         const newUser = new User({

@@ -10,7 +10,7 @@ const {authUser} = require("./middlewares/auth");
 const {authRouter} = require("./routes/Auth");
 const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestRouter");
-
+const { userRouter } = require("./routes/user");
 
 app.use(cookieParser());
 app.use(express.json());
@@ -18,9 +18,10 @@ app.use(express.json());
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/",userRouter)
 
 app.use("/hello",(req,res)=>{
-    console.log("hello");
+    // console.log("hello");
     res.send("hello");
 })  
 
@@ -84,7 +85,7 @@ app.use("/hello",(req,res)=>{
  app.delete("/delUser", async(req,res)=>{
     //req body contains the fiels like emailId,name,...
     const userId = req.body._id;
-    console.log(userId);
+    // console.log(userId);
     try{
     const user = await User.findByIdAndDelete(userId);
     res.send("User successfully deleted");
@@ -98,8 +99,8 @@ app.use("/hello",(req,res)=>{
 app.patch("/updateUser",async(req,res)=>{
     const userId = req.body.userId;
     const data = req.body;
-    console.log(userId);
-    console.log(data);
+    // console.log(userId);
+    // console.log(data);
     try{
         if(data.skills.length > 10){
             //this will now throw ans error & has a custom message as written in " " ans can be catched in catch block & then displayed
@@ -118,12 +119,12 @@ app.patch("/updateUser",async(req,res)=>{
 
 connectDB()
 .then(()=>{    
-    console.log("successfully connected to the database");
+    // console.log("successfully connected to the database");
     app.listen(7777,()=>{
-        console.log("Server is successfully listening to port 7777");
+        // console.log("Server is successfully listening to port 7777");
     });
 
     })
     .catch((err)=>{
-    console.log("An error occured :/");
+    // console.log("An error occured :/");
     })

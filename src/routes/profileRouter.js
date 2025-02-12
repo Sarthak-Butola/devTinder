@@ -10,7 +10,7 @@ profileRouter.patch("/profile/edit",authUser, async(req,res)=>{
             throw new Error("Invalid Edit");
         }
         const loggedInUser = req.user;
-        console.log(loggedInUser);
+        // console.log(loggedInUser);
 
         //saving loggedInUser values as req.user values/edited values sent by user
         Object.keys(req.body).forEach((key)=>(loggedInUser[key] = req.body[key]));
@@ -19,7 +19,7 @@ profileRouter.patch("/profile/edit",authUser, async(req,res)=>{
         //saving in DB
         await loggedInUser.save();
 
-        console.log(loggedInUser);
+        // console.log(loggedInUser);
         res.send( loggedInUser.firstName + "'s Profile has been updated successfully");
 
     }catch(err){
