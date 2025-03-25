@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const{connectDB} = require("./config/database");
@@ -11,14 +12,33 @@ const {authRouter} = require("./routes/Auth");
 const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestRouter");
 const { userRouter } = require("./routes/user");
+const searchRouter = require("./routes/searchRouter");
+const cors = require("cors");
+const http = require("http");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
 
+
+app.use(
+    cors({
+        origin:"http://localhost:5173",
+        credentials:true,
+        })
+    );
 app.use(cookieParser());
 app.use(express.json());
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
-app.use("/",userRouter)
+app.use("/",userRouter);
+app.use("/",searchRouter);
+app.use("/",chatRouter);
+
+//SOCKET . IO STUFF
+// CREATING A SERVER
+const server = http.createServer(app);
+initializeSocket(server);
 
 app.use("/hello",(req,res)=>{
     // console.log("hello");
@@ -120,11 +140,12 @@ app.patch("/updateUser",async(req,res)=>{
 connectDB()
 .then(()=>{    
     // console.log("successfully connected to the database");
-    app.listen(7777,()=>{
-        // console.log("Server is successfully listening to port 7777");
+    //appp.listen to => server.listen to make sockets work
+    server.listen(process.env.PORT,()=>{
+        console.log("Server is successfully listening to port 7777");
     });
 
     })
     .catch((err)=>{
-    // console.log("An error occured :/");
+    console.log("An error occured :/");
     })

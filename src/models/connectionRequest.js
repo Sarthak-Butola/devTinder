@@ -12,6 +12,7 @@ const connectionRequestSchema = new mongoose.Schema({
         required:true,
         ref:"User",
     },
+ 
     status:{
         type:String,
         required:true,

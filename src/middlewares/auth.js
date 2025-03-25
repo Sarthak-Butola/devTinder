@@ -7,9 +7,10 @@ const authUser = async(req,res,next)=>{
         const {token}=cookies;
         
         if(!token){
-            throw new Error("Token isn't valid");
+            // throw new Error("Token isn't valid");
+            return res.status(401).send("Token isn't valid");
         }
-
+//                                           JWT_SECRET = qwerty12345678 isn't working here..why..??
         const decodedMsg = await jwt.verify(token,"qwerty12345678");
     
         const{userId} = decodedMsg;
@@ -22,7 +23,7 @@ const authUser = async(req,res,next)=>{
         req.user = user;
         next();
         } catch(err){
-            res.status(400).send("ERROR : " + err.message);
+            res.status(401).send("ERROR : " + err.message);
         }
  };
 

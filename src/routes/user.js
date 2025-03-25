@@ -5,7 +5,7 @@ const ConnectionRequestModel = require("../models/connectionRequest");
 const { ConnectionStates } = require("mongoose");
 const User = require("../models/user");
 
-const USER_INFO = "firstName lastName age skills"
+const USER_INFO = "firstName lastName age skills photoUrl gender about "
 
 //get all pending connection requests for logged in user
 userRouter.get("/user/requests/received",authUser, async(req, res)=>{
@@ -16,7 +16,7 @@ userRouter.get("/user/requests/received",authUser, async(req, res)=>{
             toUserId:loggedInUser._id,
             status:"interested"
         // }).populate("fromUserId", ["firstName", "lastName", "age", "skills"])
-        }).populate("fromUserId", "firstName lastName age skills")
+        }).populate("fromUserId", "firstName lastName age skills about gender photoUrl")
 
         if(!connectionRequests){
             throw new Error("No pending connection requests");
@@ -90,7 +90,7 @@ try{
 
     // console.log(hideUsersFromFeed);
 
-    //USERS CONTAINS USERS THAT ARENT IN HIDEUSERSFROMFEED A CONNECTION OF LOGGEDINUSER
+    //USERS CONTAINS USERS THAT AREN'T IN HIDE USERSFROMFEED A CONNECTION OF LOGGEDINUSER
     const users = await User.find({
         $and: [
         {_id:{$nin: Array.from(hideUsersFromFeed)}},
@@ -108,7 +108,6 @@ try{
 } 
  
 })
-
 
 
 module.exports = {

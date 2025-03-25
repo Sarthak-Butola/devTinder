@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
         type:Number,
         min:18,
     },
+    photoUrl:{
+        type:String,
+
+    },
     skills:{
         type:[String]
     },

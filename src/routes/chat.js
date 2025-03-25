@@ -1,0 +1,32 @@
+const express = require("express");
+const { authUser } = require("../middlewares/auth");
+const { Chat } = require("../models/chat");
+const chatRouter = express();
+
+chatRouter.get("/chat/:targetUserId", authUser, async(req, res)=>{
+    const userId = req.user._id;
+    const {targetUserId} = req.params;
+    
+    try{
+        let chat = await Chat.findOne({
+            participants:{$all : [userId, targetUserId]},
+        }).populate({
+            path: "messages.senderId",
+            select: "firstName lastName ",
+        });
+
+        if(!chat){
+            chat = new Chat({
+                participants: [userId, targetUserId],
+                messages: [],
+            });
+            await Chat.save();
+        }
+        res.json(chat);
+
+    }catch(err){
+        console.log(err);
+    };
+});
+
+module.exports = chatRouter;

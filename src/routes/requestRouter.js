@@ -10,10 +10,10 @@ requestRouter.post("/request/send/:status/:toUserId",authUser,async(req,res)=>{
     try{
         const user = req.user;
         const fromUserId = user._id;
-        const toUserId = req.params.toUserId;
+            const toUserId = req.params.toUserId;
         const status = req.params.status;
         
-        const allowedStatus = ["interested", "ignored"];
+        const allowedStatus = ["interested","ignore"];
 
         if(!allowedStatus.includes(status)){
             //INVALID STATUS
@@ -49,7 +49,7 @@ requestRouter.post("/request/send/:status/:toUserId",authUser,async(req,res)=>{
         })
     
         const data = await connectionRequest.save();
-    
+     
         res.json({
             message:"connection request sent successfully",
             data,

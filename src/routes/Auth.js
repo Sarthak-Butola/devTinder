@@ -28,7 +28,7 @@ authRouter.post("/login",async(req,res)=>{
                 });
                 // console.log(token);
                 
-                res.send("login successful");
+                res.send(user);
             }
             else{
                 throw new Error("Invalid credentials");
@@ -46,7 +46,7 @@ authRouter.post("/signup", async(req,res)=>{
     //validate the data
     validateSignupData(req);
 
-    const{password,firstName,lastName,emailId,age,gender,skills} = req.body;
+    const{password,firstName,lastName,emailId,age,gender,skills,photoUrl} = req.body;
     //encrypt the password before storing in the database
     const passwordHash=await bcrypt.hash(password, 10);
     // console.log(passwordHash);
@@ -59,12 +59,24 @@ authRouter.post("/signup", async(req,res)=>{
             emailId,
             age,
             gender,
-            skills
+            skills,
+            photoUrl
         })
 
     //this saves the user data into the DB
-        await newUser.save();
-        res.send("User added successfully!!");
+       const user = await newUser.save();
+
+       { 
+        //creating a token                                              
+        const token = await jwt.sign({userId: user._id}, "qwerty12345678", {expiresIn:"7d"});;
+        
+        //               token expiring in 24 hours
+        res.cookie("token",token,{
+            expires: new Date(Date.now() + 24 * 3600000),
+        });
+        }
+
+        res.json({message: "User added successfully!!" , data:user});
     }catch(err){
         res.status(400).send("error in saving the user:" + err.message);
         }
