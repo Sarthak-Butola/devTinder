@@ -6,6 +6,7 @@ const User = require("../models/user");
 const ConnectionRequestModel = require("../models/connectionRequest");
 const { Chat } = require("../models/chat");
 
+
 profileRouter.patch("/profile/delete/User", authUser, async(req,res)=>{
     try{
         const {confirmation} = req.body;
