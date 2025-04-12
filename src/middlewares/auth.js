@@ -10,8 +10,8 @@ const authUser = async(req,res,next)=>{
             // throw new Error("Token isn't valid");
             return res.status(401).send("Token isn't valid");
         }
-//                                           JWT_SECRET = qwerty12345678 isn't working here..why..??
-        const decodedMsg = await jwt.verify(token,"qwerty12345678");
+
+        const decodedMsg = await jwt.verify(token, process.env.JWT_SECRET);
     
         const{userId} = decodedMsg;
 

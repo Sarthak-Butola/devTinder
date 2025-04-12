@@ -29,10 +29,10 @@ const getSecretRoomId = (userId, targetUserId)=>{
             socket.join(roomId);
         });
 
-        socket.on("sendMessage",async({firstName, userId, targetUserId, text})=>{
+        socket.on("sendMessage",async({firstName, userId, targetUserId, text, lastName})=>{
             // const roomId = [userId, targetUserId].sort().join("_");
              let roomId = getSecretRoomId(userId, targetUserId);
-            // console.log(firstName + ": " + text);
+            // console.log(firstName + " " + lastName + ": " + text);
 
             try{
                 let chat = await Chat.findOne({
@@ -49,11 +49,12 @@ const getSecretRoomId = (userId, targetUserId)=>{
                 chat.messages.push({
                     senderId:userId,
                     text,
+                    lastName,   
                 });
                 
                 await chat.save();
 
-              io.to(roomId).emit("messageReceived", {firstName, text});
+              io.to(roomId).emit("messageReceived", {firstName, text, lastName});
             }
             catch(err){
                 console.log(err);

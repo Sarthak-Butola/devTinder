@@ -19,8 +19,8 @@ authRouter.post("/login",async(req,res)=>{
 
             if(isPasswordValid){
                 
-                //creating a token                                              //expiring token
-                const token = await jwt.sign({userId: user._id}, "qwerty12345678", {expiresIn:"7d"});
+                //creating a token            //expiring token
+                const token = await jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn:"7d"});
                 
                 //               token expiring in 24 hours
                 res.cookie("token",token,{
@@ -67,8 +67,8 @@ authRouter.post("/signup", async(req,res)=>{
        const user = await newUser.save();
 
        { 
-        //creating a token                                              
-        const token = await jwt.sign({userId: user._id}, "qwerty12345678", {expiresIn:"7d"});;
+        //creating a token              
+        const token = await jwt.sign({userId: user._id}, process.env.JWT_SECRET , {expiresIn:"7d"});;
         
         //               token expiring in 24 hours
         res.cookie("token",token,{
@@ -90,7 +90,7 @@ res.cookie("token", null, {
 })
 res.send("Logout successful");
     }catch(err){
-      console.log('err.message');
+      console.log(err.message);
     }
 })
 
