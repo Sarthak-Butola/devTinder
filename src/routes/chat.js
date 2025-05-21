@@ -57,12 +57,12 @@ chatRouter.get("/chat/:targetUserId", authUser, async(req, res)=>{
             select: "firstName lastName ",
         });
 
-        if(!chat){
+        if(!chat){  
             chat = new Chat({
                 participants: [userId, targetUserId],
                 messages: [],
             });
-            await Chat.save();
+            await chat.save();
         }
         res.json(chat);
 

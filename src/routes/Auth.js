@@ -19,7 +19,7 @@ authRouter.post("/login",async(req,res)=>{
 
             if(isPasswordValid){
                 
-                //creating a token            //expiring token
+                                               //creating a token    //secret key       //expiring token
                 const token = await jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn:"7d"});
                 
                 //               token expiring in 24 hours
