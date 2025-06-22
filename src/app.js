@@ -148,5 +148,7 @@ connectDB()
 
     })
     .catch((err)=>{
-    console.log("An error occured :/ => " + err.message);
+    // console.log("An error occured :/ => " + err.message);
+    console.log(`An error occurred :/ => ${err.message}`);
+
     })
