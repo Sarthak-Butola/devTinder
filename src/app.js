@@ -141,8 +141,9 @@ connectDB()
 .then(()=>{    
     // console.log("successfully connected to the database");
     //appp.listen to => server.listen to make sockets work
-    server.listen(process.env.PORT,()=>{
-        console.log("Server is successfully listening to port 7777");
+    const PORT = process.env.PORT || 5000
+    server.listen(PORT,()=>{
+        console.log(`Server is successfully listening to ${PORT} `);
     });
 
     })
