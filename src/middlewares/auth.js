@@ -23,7 +23,9 @@ const authUser = async(req,res,next)=>{
         req.user = user;
         next();
         } catch(err){
-            res.status(401).send("ERROR : " + err.message);
+            // res.status(401).send("ERROR : " + err.message);
+            res.status(401).json({ error: err.message || "Unauthorized" });
+
         }
  };
 
