@@ -25,8 +25,8 @@ authRouter.post("/login",async(req,res)=>{
                 //               token expiring in 24 hours
                 res.cookie("token",token,{
                     httpOnly:true,
-                    secure:false,
-                    sameSite: "Lax", 
+                    secure:true,
+                    sameSite: "None", 
                     expires: new Date(Date.now() + 24 * 3600000),
                 });
                 // console.log(token);
