@@ -15,7 +15,11 @@ const getSecretRoomId = (userId, targetUserId)=>{
 
     const io = socket(server, {
         cors:{
-            origin:("http://localhost:5173")
+            origin:["http://localhost:5173",
+                    "https://dev-tinder-web-f5fb.vercel.app"],
+                    methods: ["GET", "POST"],
+                    credentials:true
+            
         },
     });
     
