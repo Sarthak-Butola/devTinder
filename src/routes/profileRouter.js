@@ -39,6 +39,9 @@ profileRouter.patch("/profile/delete/User", authUser, async(req,res)=>{
 
         // EXPIRING COOKIE AFTER ACCOUNT DELETION
         res.cookie("token", null, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
             expires: new Date(Date.now()),
         })
 

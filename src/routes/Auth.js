@@ -75,6 +75,9 @@ authRouter.post("/signup", async(req,res)=>{
         
         //               token expiring in 24 hours
         res.cookie("token",token,{
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
             expires: new Date(Date.now() + 24 * 3600000),
         });
         }
@@ -89,7 +92,7 @@ authRouter.post("/signup", async(req,res)=>{
 authRouter.post("/logout", (req,res)=>{
     try{
 res.cookie("token", null, {
-     httpOnly: true,
+    httpOnly: true,
     secure: true,
     sameSite: "None",
     expires: new Date(Date.now()),
