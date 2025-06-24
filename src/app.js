@@ -22,7 +22,7 @@ const chatRouter = require("./routes/chat");
 app.use(
     cors({
         origin:["http://localhost:5173",
-        "https://dev-tinder-web-f5fb.vercel.app/"],
+        "https://dev-tinder-web-f5fb.vercel.app"],
         credentials:true,
         })
     );
