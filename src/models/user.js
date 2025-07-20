@@ -3,6 +3,10 @@ const validator = require("validator");
 const { default: isEmail } = require('validator/lib/isEmail');
 
 const userSchema = new mongoose.Schema({
+    emailNotifications: {
+        type: Boolean,
+        default: false, // all existing users will have this by default
+    },
     firstName:{
         type:String,
         required:true,
@@ -27,14 +31,14 @@ const userSchema = new mongoose.Schema({
         }
 
     },
-     password:{
-        type:String,
-        required:true,
-        validate(value){
-            if(!validator.isStrongPassword(value)){
-                throw new Error("weak password, kindly change to a stronger one..")
+        password:{
+            type:String,
+            required:true,
+            validate(value){
+                if(!validator.isStrongPassword(value)){
+                    throw new Error("weak password, kindly change to a stronger one..")
+                }
             }
-        }
     },
     nickname:{
         type:String
