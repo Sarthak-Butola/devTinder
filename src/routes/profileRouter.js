@@ -91,4 +91,30 @@ profileRouter.get("/profile",authUser,async(req,res)=>{
 })
 
 
+// PATCH /profile/email-notifications
+profileRouter.patch("/profile/email-notifications", authUser, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { emailNotifications } = req.body;
+
+    if (typeof emailNotifications !== "boolean") {
+      return res.status(400).json({ error: "emailNotifications must be a boolean" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { emailNotifications },
+      { new: true, runValidators: true }
+    );
+
+    res.json({
+      message: "Email notification preference updated",
+      emailNotifications: updatedUser.emailNotifications,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error: " + err.message });
+  }
+});
+
+
 module.exports = profileRouter;
