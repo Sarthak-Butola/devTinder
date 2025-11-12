@@ -31,15 +31,33 @@ const userSchema = new mongoose.Schema({
         }
 
     },
-        password:{
-            type:String,
-            required:true,
-            validate(value){
-                if(!validator.isStrongPassword(value)){
-                    throw new Error("weak password, kindly change to a stronger one..")
-                }
-            }
+    //     password:{
+    //         type:String,
+    //         required:true,
+    //         validate(value){
+    //             if(!validator.isStrongPassword(value)){
+    //                 throw new Error("weak password, kindly change to a stronger one..")
+    //             }
+    //         }
+    // },
+
+    password: {
+    type: String,
+    required: function() {
+        return !this.googleId; // only required if not a Google user
     },
+    validate: function(value) {
+        if (!this.googleId && !validator.isStrongPassword(value)) {
+        throw new Error("Weak password, kindly change to a stronger one.");
+        }
+    },
+    },
+    googleId: {
+    type: String, // store Google ID for OAuth users
+    },
+
+
+
     nickname:{
         type:String
     },
